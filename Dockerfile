@@ -14,12 +14,17 @@ RUN apt-get update && apt-get install -y \
 	# >just to get the ./build_OAI script to run
 	sudo
 
-RUN git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git 
-WORKDIR openairinterface5g
+#fixes protobuf compiler crash
+RUN adduser oai && adduser oai sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER oai
+WORKDIR /home/oai
+RUN git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git && git checkout develop
+WORKDIR /home/oai/openairinterface5g
 CMD [ "source", "./oaienv" ]
 
-CMD [ "./cmake_targets/build_oai", "-I" ]
-CMD [ "./cmake_targets/build_oai", "-h" ]
+CMD [ "./cmake_targets/build_oai", "-I", "--w USRP", "--eNB" ]
+CMD [ "./cmake_targets/lte_build_oai/build/lte-softmodem" ]
 
 
 
