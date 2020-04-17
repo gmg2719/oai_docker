@@ -19,12 +19,13 @@ RUN adduser oai && adduser oai sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER oai
 WORKDIR /home/oai
-RUN git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git && git checkout develop
+RUN git clone https://gitlab.eurecom.fr/oai/openairinterface5g.git 
+#&& git checkout develop
 WORKDIR /home/oai/openairinterface5g
 CMD [ "source", "./oaienv" ]
 
-CMD [ "./cmake_targets/build_oai", "-I", "--w USRP", "--eNB" ]
-CMD [ "./cmake_targets/lte_build_oai/build/lte-softmodem" ]
+CMD [ "/home/oai/openairinterface5g/cmake_targets/build_oai", "-I","--eNB", "-w USRP" ]
+CMD [ "/home/oai/openairinterface5g/cmake_targets/lte_build_oai/build/lte-softmodem" ]
 
 
 
